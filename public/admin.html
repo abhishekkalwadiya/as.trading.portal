@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+</head>
+<body>
+  <h1>Registered Clients</h1>
+  <ul id="userList"></ul>
+  <script>
+    async function loadUsers() {
+      const res = await fetch('/admin/users');
+      const users = await res.json();
+      const list = document.getElementById('userList');
+      list.innerHTML = '';
+      users.forEach((user, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${user.name} | ${user.email} | ${user.plan} | ${user.status || 'Pending'} 
+          <button onclick="markPaid(${index})">Mark as Paid</button>`;
+        list.appendChild(li);
+      });
+    }
+    async function markPaid(index) {
+      await fetch('/admin/mark-paid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index })
+      });
+      loadUsers();
+    }
+    loadUsers();
+  </script>
+</body>
+</html>

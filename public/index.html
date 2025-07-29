@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AS Trading - Register</title>
+</head>
+<body>
+  <h1>Register with AS TRADING</h1>
+  <form id="registrationForm">
+    <input type="text" name="name" placeholder="Full Name" required><br>
+    <input type="email" name="email" placeholder="Email Address" required><br>
+    <label for="plan">Select Plan:</label>
+    <select name="plan" id="plan" required>
+      <option value="">-- Choose a Plan --</option>
+      <option value="Basic">Basic - ₹399</option>
+      <option value="Standard">Standard - ₹699</option>
+      <option value="Premium">Premium - ₹999</option>
+    </select><br><br>
+    <button type="submit">Submit and Pay</button>
+  </form>
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      await fetch("/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      window.location.href = "upi://pay?pa=ganuiii@indie&pn=AS TRADING&cu=INR";
+    });
+  </script>
+</body>
+</html>
